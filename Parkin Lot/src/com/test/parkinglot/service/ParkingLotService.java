@@ -28,6 +28,7 @@ public class ParkingLotService {
         switch(vehicleType){
             case BIKE:{
                 vehicle = new Bike(vehicleNumber);
+                break;
             }
             default:{
                 vehicle = new Car(vehicleNumber);

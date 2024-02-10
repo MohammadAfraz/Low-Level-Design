@@ -25,6 +25,7 @@ public class StorageService {
             switch (vehicleType){
                 case CAR:{
                     typeMap.put(VehicleType.CAR, ParkingSpotType.CAR);
+                    break;
                 }
                 default:{
                     typeMap.put(VehicleType.BIKE, ParkingSpotType.BIKE);
