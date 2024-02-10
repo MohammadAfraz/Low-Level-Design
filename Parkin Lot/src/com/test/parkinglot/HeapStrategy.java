@@ -1,10 +1,14 @@
 package com.test.parkinglot;
 
 import com.test.parkinglot.exceptions.IncorrectNumberOfParameters;
+import com.test.parkinglot.exceptions.NoParkingSpotAvailable;
+import com.test.parkinglot.model.ParkingSpot;
+import com.test.parkinglot.model.ParkingSpotType;
+import com.test.parkinglot.model.ParkingStrategy;
 
 import java.util.*;
 
-public class HeapStrategy implements ParkingStrategy{
+public class HeapStrategy implements ParkingStrategy {
     Map<ParkingSpotType, PriorityQueue<ParkingSpot>> availableParkingSpots;
 
     //Ideally for each parking spot's distance from entrance, we need 1 more param to the constructor - List<<List<Integer>>> specifying distances of all spots
@@ -33,6 +37,9 @@ public class HeapStrategy implements ParkingStrategy{
     }
 
     public ParkingSpot fetchParkingSpot(ParkingSpotType parkingSpotType){
+        if(availableParkingSpots.size() == 0){
+            throw new NoParkingSpotAvailable("All parking spots are occupied!");
+        }
         return availableParkingSpots.get(parkingSpotType).poll();
     }
 }

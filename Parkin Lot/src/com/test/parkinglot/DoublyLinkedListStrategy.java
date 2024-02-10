@@ -1,13 +1,17 @@
 package com.test.parkinglot;
 
 import com.test.parkinglot.exceptions.IncorrectNumberOfParameters;
+import com.test.parkinglot.exceptions.NoParkingSpotAvailable;
+import com.test.parkinglot.model.ParkingSpot;
+import com.test.parkinglot.model.ParkingSpotType;
+import com.test.parkinglot.model.ParkingStrategy;
 
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class DoublyLinkedListStrategy implements ParkingStrategy{
+public class DoublyLinkedListStrategy implements ParkingStrategy {
     Map<ParkingSpotType, Deque<ParkingSpot>> availableParkingSpots;
     public DoublyLinkedListStrategy(List<Integer> capacities){
         validate(capacities.size(), ParkingSpotType.values().length);
@@ -32,6 +36,9 @@ public class DoublyLinkedListStrategy implements ParkingStrategy{
     }
 
     public ParkingSpot fetchParkingSpot(ParkingSpotType parkingSpotType){
+        if(availableParkingSpots.size() == 0){
+            throw new NoParkingSpotAvailable("All parking spots are occupied!");
+        }
         return availableParkingSpots.get(parkingSpotType).getFirst();
     }
 }

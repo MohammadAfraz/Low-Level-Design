@@ -1,5 +1,11 @@
 package com.test.parkinglot;
 
+import com.test.parkinglot.model.ParkingSpot;
+import com.test.parkinglot.model.ParkingStrategy;
+import com.test.parkinglot.model.ParkingStrategyType;
+import com.test.parkinglot.model.VehicleType;
+import com.test.parkinglot.service.StorageService;
+
 import java.util.List;
 
 public class ParkingFloor {

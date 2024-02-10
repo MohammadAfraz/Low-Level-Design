@@ -1,11 +1,13 @@
-package com.test.parkinglot;
+package com.test.parkinglot.service;
 
-import java.util.ArrayList;
+import com.test.parkinglot.ParkingFloor;
+import com.test.parkinglot.model.*;
+
 import java.util.List;
 
 public class ParkingLotService {
     ParkingFloor parkingFloor = new ParkingFloor(List.of(3, 3), ParkingStrategyType.DEQUE);
-    static final ParkingLotService INSTANCE = new ParkingLotService();
+    public static final ParkingLotService INSTANCE = new ParkingLotService();
     public ParkingSpot fetchParkingSpot(String vehicleNumber, VehicleType vehicleType){
         Vehicle vehicle = getVehicle(vehicleNumber, vehicleType);
         ParkingSpot parkingSpot = parkingFloor.fetchParkingSpot(vehicleType);

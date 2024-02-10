@@ -1,4 +1,10 @@
-package com.test.parkinglot;
+package com.test.parkinglot.service;
+
+import com.test.parkinglot.exceptions.ParkingSpotNotFoundException;
+import com.test.parkinglot.model.ParkingSpot;
+import com.test.parkinglot.model.ParkingSpotType;
+import com.test.parkinglot.model.Vehicle;
+import com.test.parkinglot.model.VehicleType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +15,7 @@ public class StorageService {
     Map<String, Vehicle> idToVehicleMap;
     Map<String, ParkingSpot> idToParkingSpotMap;
 
-    static final StorageService INSTANCE = new StorageService();
+    public static final StorageService INSTANCE = new StorageService();
     public StorageService(){
         initializeVehicleTypeToSpotTypeMapping();
     }
@@ -56,8 +62,10 @@ public class StorageService {
     }
 
     public ParkingSpot getParkingSpotFromVehicleNumber(String vehicleNumber){
-        //validation
         String parkingSpotId = vehicleToSpotMap.get(vehicleNumber);
+        if(parkingSpotId == null){
+            throw new ParkingSpotNotFoundException("ParkingSpot is not present for given vehicleNumber");
+        }
         return idToParkingSpotMap.get(parkingSpotId);
 
     }

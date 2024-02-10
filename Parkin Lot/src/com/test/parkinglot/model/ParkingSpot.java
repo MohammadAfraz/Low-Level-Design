@@ -1,4 +1,4 @@
-package com.test.parkinglot;
+package com.test.parkinglot.model;
 
 import java.util.UUID;
 
