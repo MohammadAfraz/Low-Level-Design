@@ -1,3 +1,5 @@
+package com.demo.eventbus.utils;
+
 import java.util.HashMap;
 import java.util.Map;
 

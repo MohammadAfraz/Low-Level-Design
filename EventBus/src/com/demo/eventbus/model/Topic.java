@@ -1,3 +1,7 @@
+package com.demo.eventbus.model;
+
+import com.demo.eventbus.model.Event;
+
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -6,7 +10,7 @@ public class Topic {
 
     String topicId;
     private List<Event> events;
-    private Map<String,Subscription> subscriptions;
+    private Map<String, Subscription> subscriptions;
 
     public Topic(){
         topicId = UUID.randomUUID().toString();

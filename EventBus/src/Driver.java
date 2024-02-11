@@ -1,7 +1,9 @@
-import java.util.concurrent.Callable;
+import com.demo.eventbus.model.Event;
+import com.demo.eventbus.model.Subscriber;
+import com.demo.eventbus.utils.DeadLetterQueueMap;
+
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class Driver {
@@ -13,7 +15,7 @@ public class Driver {
         String subscriberId1 = new Subscriber().getSubscriberId();
         CompletableFuture<Void> future1 = new CompletableFuture<>();
         Function<Event, CompletionStage<Void>> callback = (a) -> {
-            String eventId = a.eventId;
+            String eventId = a.getEventId();
             System.out.println("Event successfully received by subscriber via callback!! EventId : " + eventId + " SubscriberId : " + subscriberId1);
             return future1;
         };

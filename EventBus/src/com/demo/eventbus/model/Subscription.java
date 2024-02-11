@@ -1,3 +1,7 @@
+package com.demo.eventbus.model;
+
+import com.demo.eventbus.model.Event;
+
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 

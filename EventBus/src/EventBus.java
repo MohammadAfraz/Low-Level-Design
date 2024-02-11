@@ -1,10 +1,17 @@
+import com.demo.eventbus.exceptions.RetriesExhaustedException;
+import com.demo.eventbus.model.Event;
+import com.demo.eventbus.model.EventBusInterface;
+import com.demo.eventbus.model.Subscription;
+import com.demo.eventbus.model.Topic;
+import com.demo.eventbus.utils.DeadLetterQueueMap;
+import com.demo.eventbus.utils.HashedExecutor;
+
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
-public class EventBus implements EventBusInterface{
+public class EventBus implements EventBusInterface {
     private HashedExecutor pushToTopicExecutor;
     private HashedExecutor pushToSubsribersExecutor;
     private Map<String, Topic> topics;
@@ -54,13 +61,13 @@ public class EventBus implements EventBusInterface{
     }
 
     private CompletionStage<Void> pushToSubscriber(Subscription subscription, Event event){
-        return pushToSubsribersExecutor.execute(subscription.getSubscriberId(), callbackWithRetry(subscription, event, maxRetries));//Async Push to a Subscriber
+        return pushToSubsribersExecutor.execute(subscription.getSubscriberId(), callbackWithRetry(subscription, event, maxRetries));//Async Push to a com.demo.eventbus.model.Subscriber
     }
 
     private CompletionStage<Void> callbackWithRetry(Subscription subscription, Event event, int retryCount){
-        return subscription.callBack.apply(event).exceptionally((t) -> {
+        return subscription.getCallBack().apply(event).exceptionally((t) -> {
                 if (retryCount == 1) {
-                    //throw new RetriesExhaustedException("Max retrials completed for subscriber: " + subscription.subscriberId + " & event: " + event.getEventId());
+                    //throw new com.demo.eventbus.exceptions.RetriesExhaustedException("Max retrials completed for subscriber: " + subscription.subscriberId + " & event: " + event.getEventId());
                     pushToTopic(DeadLetterQueueMap.getDeadQueueId(subscription.getTopicId()), event);
                     throw new RetriesExhaustedException(t);
                 }

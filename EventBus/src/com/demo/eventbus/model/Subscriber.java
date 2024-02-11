@@ -1,3 +1,5 @@
+package com.demo.eventbus.model;
+
 import java.util.UUID;
 
 public class Subscriber {
