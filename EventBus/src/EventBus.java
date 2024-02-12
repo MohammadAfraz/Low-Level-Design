@@ -36,7 +36,7 @@ public class EventBus implements EventBusInterface {
         topics.remove(topicId);
     }
 
-    public void registerSubscriber(String subscriberId, String topicId, Function<Event, CompletionStage<Void>> callBack){
+    private void registerSubscriber(String subscriberId, String topicId, Function<Event, CompletionStage<Void>> callBack){
         Subscription subscription = new Subscription(subscriberId, topicId, callBack);
         topics.get(topicId).addSubscription(subscriberId, subscription);
     }
