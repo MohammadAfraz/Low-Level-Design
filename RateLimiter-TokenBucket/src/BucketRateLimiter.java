@@ -33,7 +33,7 @@ public class BucketRateLimiter {
         executorService.submit(() -> {
             if(bucket.get() == 0){
                 droppedCount.increment();
-                throw new TokenNotAvailableException("Bucket has not tokens!! com.demo.bucket.model.Request will be dropped.");
+                throw new TokenNotAvailableException("Bucket has not tokens!! Request will be dropped.");
             }
             acceptedCount.increment();
             bucket.decrementAndGet();
