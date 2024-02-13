@@ -1,3 +1,5 @@
+package com.demo.bucket;
+
 import com.demo.bucket.exceptions.TokenNotAvailableException;
 import com.demo.bucket.model.Request;
 import com.demo.bucket.model.Storage;
@@ -10,15 +12,20 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.LongAdder;
 
-public class BucketRateLimiter {
+/**When Number of Tokens to refill is equivalent to full capacity, this becomes equivalent to a Fixed Window Rate Limiter.
+ * Use lesser tokens as compared to full capacity, in order to use as a TokenBucket.
+ */
+public class TokenBucketRateLimiter {
+    int capacity;
     AtomicInteger bucket;
     Storage storage;
     ExecutorService  executorService;
     ScheduledExecutorService scheduledExecutorService;
     LongAdder acceptedCount, droppedCount;
-    public BucketRateLimiter(int tokens, long interval){
+    public TokenBucketRateLimiter(int capacity, int tokens, long interval){
+        this.capacity = capacity;
         bucket = new AtomicInteger();
-        storage = new Storage();
+        storage = Storage.INSTANCE;
         acceptedCount = new LongAdder();
         droppedCount = new LongAdder();
         executorService = Executors.newCachedThreadPool();
@@ -26,19 +33,22 @@ public class BucketRateLimiter {
         scheduledExecutorService.scheduleAtFixedRate(() -> refillBucket(tokens), 0, interval, TimeUnit.MILLISECONDS);
     }
     private void refillBucket(Integer tokens){
-        bucket.addAndGet(tokens);
+        int updatedValue = Math.min(capacity, bucket.get()+tokens);
+        bucket.set(updatedValue);
     }
 
     public void addRequest(Request request){
         executorService.submit(() -> {
-            if(bucket.get() == 0){
-                droppedCount.increment();
-                throw new TokenNotAvailableException("Bucket has not tokens!! Request will be dropped.");
+            synchronized(this) {
+                if (bucket.get() == 0) {
+                    droppedCount.increment();
+                    throw new TokenNotAvailableException("Bucket has not tokens!! Request will be dropped.");
+                }
+                acceptedCount.increment();
+                bucket.decrementAndGet();
+                request.setTimestamp(Timer.getCurrentTime());
+                storage.addRequest(request);
             }
-            acceptedCount.increment();
-            bucket.decrementAndGet();
-            request.setTimestamp(Timer.getCurrentTime());
-            storage.addRequest(request);
         });
     }
 
