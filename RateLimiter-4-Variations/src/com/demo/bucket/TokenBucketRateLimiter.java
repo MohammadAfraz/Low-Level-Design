@@ -12,10 +12,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.LongAdder;
 
-/**When Number of Tokens to refill is equivalent to full capacity, this becomes equivalent to a Fixed Window Rate Limiter.
+/**When Number of Tokens to refill is equivalent to full capacity of bucket, this becomes equivalent to a Fixed Window Rate Limiter.
  * Use lesser tokens as compared to full capacity, in order to use as a TokenBucket.
  */
-public class TokenBucketRateLimiter {
+public class TokenBucketRateLimiter implements RateLimiter{
     int capacity;
     AtomicInteger bucket;
     Storage storage;

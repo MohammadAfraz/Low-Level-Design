@@ -10,7 +10,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.LongAdder;
 
-public class SlidingWindowRateLimiter {
+public class SlidingWindowRateLimiter implements RateLimiter{
     Queue[] window;
     long startTime;
     AtomicInteger capacity;
@@ -35,14 +35,10 @@ public class SlidingWindowRateLimiter {
         long currentTime = Timer.getCurrentTime();
         int idx = (int)(currentTime - startTime)%window.length;
         long cutOffTime = currentTime - window.length;
-        //System.out.println("Inside removal!");
         if(window[idx] != null){
             Queue<Request> queue = window[idx];
-            //System.out.println("Inside removal!");
             for(Request request : queue){
-                //System.out.println("Inside removal!");
                 if(request.getTimestamp() <= cutOffTime) {
-                    //System.out.println("Inside removal!");
                     window[idx].remove(request);
                     currentRequests.decrementAndGet();
                 }

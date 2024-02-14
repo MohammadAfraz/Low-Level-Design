@@ -9,14 +9,16 @@ import java.util.Queue;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.LongAdder;
 
-public class LeakyBucketRateLimiter {
+public class LeakyBucketRateLimiter implements RateLimiter{
     Queue<Request> bucket;
     int capacity;
     Storage storage;
     ExecutorService executorService;
     ScheduledExecutorService scheduledExecutorServiceForLeakage;
     LongAdder acceptedCount, droppedCount;
-    public LeakyBucketRateLimiter(int capacity, int leakyRequests, long duration){//Rate of leaking is given by leakyRequests/duration
+
+    //Rate of leaking is given by leakyRequests/duration
+    public LeakyBucketRateLimiter(int capacity, int leakyRequests, long duration){
         this.capacity = capacity;
         bucket = new ConcurrentLinkedDeque<>();
         storage = Storage.INSTANCE;
