@@ -7,7 +7,7 @@ import java.util.List;
 public class OptimizedScan implements ElevatorMovement {
 
     @Override
-    public void assignElevator(Direction direction, int floorNumber, List<Elevator> elevatorList) {
+    public Elevator assignElevator(Direction direction, int floorNumber, List<Elevator> elevatorList) {
         int distance = Integer.MAX_VALUE;
         Elevator selectedElevator = null;
         for(Elevator elevator : elevatorList){
@@ -47,5 +47,6 @@ public class OptimizedScan implements ElevatorMovement {
         if(selectedElevator != null){
             selectedElevator.setFloorStop(floorNumber);
         }
+        return selectedElevator;
     }
 }

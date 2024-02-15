@@ -19,7 +19,18 @@ public class ElevatorManager {
             elevatorList.add(new Elevator(this.floorCount));
         }
     }
+
+    public void removeElevators(){
+        elevatorList = null;
+    }
+
+    public void removeElevator(Elevator elevator){
+        elevatorList.remove(elevator);
+    }
     public void callLift(Direction direction, int floorNumber){
-        optimizedScan.assignElevator(direction, floorNumber, elevatorList);
+        Elevator elevator = optimizedScan.assignElevator(direction, floorNumber, elevatorList);
+        if(Direction.IDLE.equals(elevator.getDirection())){
+            elevator.move(direction);
+        }
     }
 }
