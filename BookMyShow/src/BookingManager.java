@@ -10,14 +10,14 @@ public class BookingManager {
         booking.setStatus(BookingStatus.IN_PROGRESS);
         if(payment.doPayment(booking.getPrice())){
             booking.setStatus(BookingStatus.COMPLETED);
-            storage.setPaymentIdMap(booking.getBookingId(), payment);
+            storage.setReferenceNumber(booking.getBookingId(), payment.getReferenceNumber());
         }
         //Notify User using userDetails
         return booking;
     }
 
     public Booking cancelBooking(Booking booking){
-        String paymentReferenceNumber = storage.getPaymentId(booking.getBookingId());
+        String paymentReferenceNumber = storage.getReferenceNumber(booking.getBookingId());
         paymentSettler.refundPayment(paymentReferenceNumber);
         booking.setStatus(BookingStatus.CANCELLED);
         return booking;

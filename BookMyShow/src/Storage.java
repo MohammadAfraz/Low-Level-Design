@@ -43,11 +43,11 @@ public class Storage {
         return showMap.get(showId);
     }
 
-    public void setPaymentIdMap(String bookingId, Payment payment) {
-        bookingPaymentMap.put(bookingId, payment.getPaymentId());
+    public void setReferenceNumber(String bookingId, String referenceNumber) {
+        bookingPaymentMap.put(bookingId, referenceNumber);
     }
 
-    public String getPaymentId(String bookingId){
+    public String getReferenceNumber(String bookingId){
         return bookingPaymentMap.get(bookingId);
     }
 
