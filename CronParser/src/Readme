@@ -1,0 +1,6 @@
+Welcome to Cron Parser!
+1. This program takes single String as an input.The compiled classes are present under this folder : /out/production/CronParser
+   Command: java Driver "<CronExpression>"
+
+2. Various test scenarios are present in the the main method under Driver class for reference. This can be run by providing no argument to the driver class.
+   Command: java Driver
