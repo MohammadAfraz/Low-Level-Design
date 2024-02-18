@@ -2,14 +2,17 @@ import com.demo.bookmyshow.exceptions.SeatNotAvailableException;
 import com.demo.bookmyshow.model.*;
 import com.demo.bookmyshow.utils.PaymentSettler;
 
+import java.util.Map;
+
 public class BookingManager {
     Storage storage =  Storage.Instance;
     PaymentSettler paymentSettler = PaymentSettler.INSTANCE;
     public Booking doBooking(UserDetails userDetails, Booking booking, Payment payment){
-        validateSeatsAvailable(booking);
+        validateSeatsAvailability(booking);
         booking.setStatus(BookingStatus.IN_PROGRESS);
         if(payment.doPayment(booking.getPrice())){
             booking.setStatus(BookingStatus.COMPLETED);
+            markSeatsAsBooked(booking);
             storage.setReferenceNumber(booking.getBookingId(), payment.getReferenceNumber());
         }
         //Notify User using userDetails
@@ -23,12 +26,27 @@ public class BookingManager {
         return booking;
     }
 
-    private void validateSeatsAvailable(Booking booking){
+    /** Only one thread can enter below method at a time to check availability of seats.
+        If available it will block those seats
+     */
+    private synchronized void validateSeatsAvailability(Booking booking){
         Show show = storage.getShow(booking.getShowId());
+        Map<String, Seat> seatsMap = show.getScreen().getSeatsMap();
         for (String seatId : booking.getSeatIds()) {
-            if(!show.getScreen().getSeatsMap().get(seatId).isBooked()){
-                throw new SeatNotAvailableException("Seat is no longer available");
+            if(!SeatStatus.AVAILABLE.equals(seatsMap.get(seatId).getSeatStatus())){
+                throw new SeatNotAvailableException("Seat is no longer available! Please try booking other seats.");
             }
+        }
+        for (String seatId : booking.getSeatIds()) {
+            seatsMap.get(seatId).setSeatStatus(SeatStatus.BLOCKED);
+        }
+    }
+
+    private void markSeatsAsBooked(Booking booking){
+        Show show = storage.getShow(booking.getShowId());
+        Map<String, Seat> seatsMap = show.getScreen().getSeatsMap();
+        for (String seatId : booking.getSeatIds()) {
+            seatsMap.get(seatId).setSeatStatus(SeatStatus.BOOKED);
         }
     }
 }

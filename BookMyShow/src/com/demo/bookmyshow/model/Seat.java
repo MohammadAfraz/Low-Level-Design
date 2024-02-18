@@ -3,7 +3,7 @@ package com.demo.bookmyshow.model;
 public class Seat {
     String name;
     SeatType seatType;
-    boolean isBooked;
+    SeatStatus seatStatus;
 
     Integer price;
 
@@ -31,11 +31,11 @@ public class Seat {
         this.price = price;
     }
 
-    public boolean isBooked() {
-        return isBooked;
+    public SeatStatus getSeatStatus() {
+        return seatStatus;
     }
 
-    public void setBooked(boolean booked) {
-        isBooked = booked;
+    public void setSeatStatus(SeatStatus seatStatus) {
+        this.seatStatus = seatStatus;
     }
 }
