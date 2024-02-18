@@ -1,12 +1,14 @@
 package com.demo.bookmyshow.model;
 
-import com.demo.bookmyshow.model.Movie;
-import com.demo.bookmyshow.model.Screen;
-
 import java.time.LocalTime;
+import java.time.ZonedDateTime;
+import java.time.chrono.ChronoLocalDate;
+import java.time.chrono.ChronoZonedDateTime;
+import java.util.Date;
+
 public class Show {
-    com.demo.bookmyshow.model.Screen Screen;
-    LocalTime localDateTime;
+    Screen Screen;
+    LocalTime showTime;
     Movie movie;
 
     public Screen getScreen() {
@@ -17,12 +19,12 @@ public class Show {
         Screen = screen;
     }
 
-    public LocalTime getLocalDateTime() {
-        return localDateTime;
+    public LocalTime getShowTime() {
+        return showTime;
     }
 
-    public void setLocalDateTime(LocalTime localDateTime) {
-        this.localDateTime = localDateTime;
+    public void setShowTime(LocalTime showTime) {
+        this.showTime = showTime;
     }
 
     public Movie getMovie() {

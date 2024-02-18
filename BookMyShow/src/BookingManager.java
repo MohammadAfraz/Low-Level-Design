@@ -11,9 +11,13 @@ public class BookingManager {
         validateSeatsAvailability(booking);
         booking.setStatus(BookingStatus.IN_PROGRESS);
         if(payment.doPayment(booking.getPrice())){
-            booking.setStatus(BookingStatus.COMPLETED);
             markSeatsAsBooked(booking);
+            booking.setStatus(BookingStatus.COMPLETED);
             storage.setReferenceNumber(booking.getBookingId(), payment.getReferenceNumber());
+        }
+        else{
+            markSeatsAsAvailable(booking);
+            booking.setStatus(BookingStatus.PAYMENT_FAILED);
         }
         //Notify User using userDetails
         return booking;
@@ -22,6 +26,7 @@ public class BookingManager {
     public Booking cancelBooking(Booking booking){
         String paymentReferenceNumber = storage.getReferenceNumber(booking.getBookingId());
         paymentSettler.refundPayment(paymentReferenceNumber);
+        markSeatsAsAvailable(booking);
         booking.setStatus(BookingStatus.CANCELLED);
         return booking;
     }
@@ -47,6 +52,14 @@ public class BookingManager {
         Map<String, Seat> seatsMap = show.getScreen().getSeatsMap();
         for (String seatId : booking.getSeatIds()) {
             seatsMap.get(seatId).setSeatStatus(SeatStatus.BOOKED);
+        }
+    }
+
+    private void markSeatsAsAvailable(Booking booking){
+        Show show = storage.getShow(booking.getShowId());
+        Map<String, Seat> seatsMap = show.getScreen().getSeatsMap();
+        for (String seatId : booking.getSeatIds()) {
+            seatsMap.get(seatId).setSeatStatus(SeatStatus.AVAILABLE);
         }
     }
 }
