@@ -1,4 +1,4 @@
-public class DayParser extends BaseTokenParser implements TokenParser{
+public class DayParser extends BaseTokenParser{
     public DayParser() {
         limit = 8;
         name = "Day";
