@@ -43,18 +43,15 @@ public class BaseTokenParser implements TokenParser{
             if(errorMessage != null){
                 return errorMessage;
             }
-            for(int i=start; i <= end; i = i+repeatValue){
-                range[i] = true;
-            }
         }
         else{
             String errorMessage = validateExpression(token, false);
             if(errorMessage != null) {
                 return errorMessage;
             }
-            for(int i=start; i <= end; i = i+repeatValue) {
-                range[i] = true;
-            }
+        }
+        for(int i=start; i <= end; i = i+repeatValue) {
+            range[i] = true;
         }
         return null;
     }
@@ -163,7 +160,7 @@ public class BaseTokenParser implements TokenParser{
         }
         paddedString = String.format("%1$-" + 14 + "s", paddedString);
         System.out.print(paddedString);
-        for(int i=0; i<limit; i++){
+        for(int i=0; i<=end; i++){//Replaced target by end for early exit
             if(range[i]){
                 System.out.print(i+" ");
             }
